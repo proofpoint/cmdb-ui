@@ -1,0 +1,228 @@
+/*
+Copyright 2011-2013 Proofpoint, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+body{
+	background-color:#ddd;
+}
+.pageloading
+{
+	background-color:white;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding:7px;
+	border-style: double;
+	width: 100px;
+	height: 16px;
+	margin:auto;
+}
+.lineage .x-toolbar-text { color: black !important; }
+.dirty { background-color: #F5F6CE ;  }
+.pending { background-color: #FAD8FF;}
+.statusdisabled, .statusdisabled tr td  { color: #999; }
+.pp-nagios-0, .statusOK { background-color: #00CC33; color: #FFF; text-align:center; }
+table.status { border: 1px solid #CCC; padding: 1px; font-size: 8pt; }
+table.status tr td a { font-size: 8pt; }
+table.status tr, table.status td {height:8pt; line-height:8pt;
+    padding: 1px 2px;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    }
+.statusEven {}
+.inherited, .inherited td {color: #AAA !important; }
+.pp-nagios-3 , .pp-nagios-3 td, .statusUnknown{background-color: #BF44B2 !important; color: #FFF; padding-left:2px; padding-right:2px; }
+.pp-nagios-2 , .pp-nagios-2 td, .statusCritical{background-color: #FF0000 !important; color: #FFF; padding-left:2px; padding-right:2px; }
+.pp-nagios-1 , .pp-nagios-1 td, .statusWarning{background-color: #FFCC00 !important; color: #FFF; padding-left:2px; padding-right:2px;}
+.pp-nagios-0, .pp-nagios-0 td,  .statusOK { background-color: #00CC33 !important; color: #FFF; padding-left:2px; padding-right:2px;}
+.pp-nagiostext-3, a span.pp-nagiostext-3 {color: #BF44B2; font-weight:bold;}
+.pp-nagiostext-2, a span.pp-nagiostext-2 {color: #FF0000; font-weight:bold; }
+.pp-nagiostext-1, a span.pp-nagiostext-1 {color: #FFCC00; font-weight:bold;}
+.pp-nagiostext-0, a span.pp-nagiostext-0 { color: #00CC33; font-weight:bold;}
+.statusOdd {}
+.add {
+    background-image:url('extjs/resources/images/default/shared/add.gif') !important;
+}
+.drop {
+    background-image:url('extjs/resources/images/default/tree/drop-no.gif') !important;
+}
+.option {
+    background-image:url('extjs/resources/images/default/shared/plugin.gif') !important;
+}
+.download {
+    background-image:url('extjs/resources/images/default/shared/down2.gif') !important;
+}
+.close {
+    background-image:url('images/panel-close.gif') !important;
+}
+
+.pp-nagios-status {
+	height:30px;
+	font-size:8pt;	
+	//border-bottom:1px solid #222;	
+	//padding: 3 0 3 0;	
+}
+.pp-nagios-label {width:100px;background-color:#BBB;height:30px;font-size:8pt;}
+.pp-nagios-output {font-size:7pt;width:100%;}
+.x-grid3-row-body p {
+    margin:5px 5px 10px 5px !important;
+}
+.ux-mselect{
+    overflow:auto;
+    background:white;
+    position:relative; /* for calculating scroll offsets */
+    zoom:1;
+    overflow:auto;	
+}
+.ux-mselect-item{
+    font:normal 12px tahoma, arial, helvetica, sans-serif;
+    padding:2px;
+    border:1px solid #fff;
+    white-space: nowrap;
+    cursor:pointer;
+}
+.ux-mselect-selected{
+	border:1px dotted #a3bae9 !important;
+    background:#DFE8F6;
+    cursor:pointer;
+}
+
+.x-view-drag-insert-above { 
+    border-top:1px dotted #3366cc; 
+} 
+.x-view-drag-insert-below { 
+    border-bottom:1px dotted #3366cc; 
+}
+
+.ux-lovcombo-icon {
+	width:16px;
+	height:16px;
+	float:left;
+	background-position: -1px -1px ! important;
+	background-repeat:no-repeat ! important;
+}
+.ux-lovcombo-icon-checked {
+	background: transparent url(extjs/resources/images/default/menu/checked.gif);
+}
+.ux-lovcombo-icon-unchecked {
+	background: transparent url(extjs/resources/images/default/menu/unchecked.gif);
+}
+.ux-lovcombo-item-smalltext{
+	font-size: 7pt;
+}
+.ux-lovcombo-item-text{
+	font-size: 8pt;
+}
+/* Styles used by Ext.ux.form.ItemSelector */
+
+.x-form-itemselector-body .x-form-item {
+    margin: 0;
+}
+
+.x-form-itemselector-top {
+    background-image: url(images/top2.gif);
+}
+.x-form-itemselector-up {
+    background-image: url(images/up2.gif);
+}
+.x-form-itemselector-add {
+    background-image: url(images/right2.gif);
+}
+.x-form-itemselector-remove {
+    background-image: url(images/left2.gif);
+}
+.x-form-itemselector-down {
+    background-image: url(images/down2.gif);
+}
+.x-form-itemselector-bottom {
+    background-image: url(images/bottom2.gif);
+}
+.msg .x-box-mc {
+    font-size:14px;
+}
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:300px;
+    z-index:20000;
+}
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 13px;
+}
+#msg-div .msg p {
+    margin: 0;
+}
+.puppet-output {
+   display:block;
+   font: 1em 'Courier New', Courier, Fixed, monospace;
+   font-size : 100%;
+   color: #000;
+   background : #fff;
+   /*overflow : auto;*/
+   text-align:left;
+   border : 1px solid #5581C0;
+   padding : 0px 7px 0 7px;
+   margin:1em 0 1em 0;
+   line-height:15px;
+   font-weight:normal!important;
+   /*white-space: pre;*/
+}
+
+.config-output-line-notice {
+    /*font-weight: bold;*/
+    color: #1a94ff;
+} 
+.config-output-line-err {
+    /*font-weight: bold;*/
+    color: #900;
+} 
+.config-output-line-info {
+    /*font-weight: bold;*/
+    color: #179900;
+} 
+.config-output-line-debug {
+    /*font-weight: bold;*/
+    color: #575757;
+} 
+.config-output-line-warning {
+    /*font-weight: bold;*/
+    color: #fe9a20;
+} 
+.config-output-line-alert {
+    /*font-weight: bold;*/
+    color: #1a94ff;
+} 
+.config-output-line-crit {
+    /*font-weight: bold;*/
+    color: #900;
+} 
+.config-output-line-emerg {
+    /*font-weight: bold;*/
+    color: #900;
+} 

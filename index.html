@@ -1,0 +1,682 @@
+<!-- 
+Copyright 2011-2013 Proofpoint, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+	<title>Ops Inv (ext4)</title>
+	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-debug.css" />
+	<link rel="stylesheet" type="text/css" href="inventory.css" />
+	<link rel="stylesheet" type="text/css" href="ux/grid/css/GridFilters.css" />
+	<link rel="stylesheet" type="text/css" href="custom.css" />
+</head>
+<body>
+<div id="loading" class="pageloading" style="height:30;"> 
+<div class="loading-indicator" style="z-index:20000;"><img src="images/loading.gif" style="width:16px;height:16px;" align="absmiddle"> Loading...</div>
+</div> 
+
+<script type="text/javascript" src="extjs/bootstrap.js"></script>
+<script type="text/javascript" src="ux/exporter/downloadify.min.js"></script>
+<script type="text/javascript" src="ux/exporter/swfobject.js"></script>
+<script>
+
+function loadjscssfile(filename, filetype){
+ if (filetype=="js"){ //if filename is a external JavaScript file
+  var fileref=document.createElement('script')
+  fileref.setAttribute("type","text/javascript")
+  fileref.setAttribute("src", filename)
+ }
+ else if (filetype=="css"){ //if filename is an external CSS file
+  var fileref=document.createElement("link")
+  fileref.setAttribute("rel", "stylesheet")
+  fileref.setAttribute("type", "text/css")
+  fileref.setAttribute("href", filename)
+ }
+ if (typeof fileref!="undefined")
+  document.getElementsByTagName("head")[0].appendChild(fileref)
+}
+
+Ext.Loader.setConfig({
+		enabled : true
+	});
+	
+Ext.Loader.setPath('Ext.ux','ux');
+	
+Ext.flash.Component.EXPRESS_INSTALL_URL = "exporter/expressInstall.swf";
+
+Ext.require([
+    'Ext.data.*',
+    'Ext.grid.*',
+    'Ext.tree.*',
+    'Ext.state.*',
+	'Ext.ux.form.MultiSelect',
+    'Ext.ux.form.ItemSelector',
+	'Ext.ux.exporter.Button',
+	'Ext.ux.grid.ColumnsConfig',
+	'Ext.ux.grid.FiltersFeature'
+]);
+
+if(typeof PP == 'undefined')
+{
+	Ext.namespace('PP');
+	PP.log = function(log) {
+	    if (window.console) {
+	        console.log(log);
+	    }
+	}	
+}
+
+
+// Load the config syncronously, then parse it for setup
+
+PP.config={};
+var url = 'inventory.cfg?_dc=' + Ext.Date.format(new Date(),'U'),
+fileName = url.split('/').pop(),
+xhr, status, onScriptError;
+
+if (typeof XMLHttpRequest !== 'undefined') {
+    xhr = new XMLHttpRequest();
+} else {
+    xhr = new ActiveXObject('Microsoft.XMLHTTP');
+}
+
+xhr.open('GET', url, false);
+xhr.send(null);
+
+status = (xhr.status === 1223) ? 204 : xhr.status;
+
+if (status >= 200 && status < 300) {
+    try {
+    	PP.config=Ext.decode(xhr.responseText);
+	}
+	catch(err)
+	{
+		alert('There was an error loading the config. Please notify an admin.\n Error: ' + err);
+		exit;
+		
+	}
+	if(PP.config.nagios)
+	{
+		console.log('loading custom extension for NagUI')
+		Ext.Loader.loadScript(PP.config.nagios_path + 'lib/Nagios.js');
+		Ext.Loader.loadScript('integrationlibs/nagui_integration.js');
+	}
+	if(PP.config.enableGraphite)
+	{
+		console.log('loading custom extension for Graphite')
+		Ext.Loader.loadScript("integrationlibs/GraphitePanel.js");
+	}
+	if(PP.config.jira)
+	{
+		console.log('loading custom extension for Jira')
+		Ext.Loader.loadScript("integrationlibs/JiraGridPanel.js");
+	}
+	if(PP.config.enableLogStash)
+	{
+		console.log('loading custom extension for LogStash')
+		Ext.Loader.loadScript("integrationlibs/LogPanel.js");
+	}
+}
+else {
+    onError.call(this, "Failed loading synchronously via XHR: '" + url + "'; please " +
+                       "verify that the file exists. " +
+                       "XHR status code: " + status);
+}
+
+</script>
+<script type="text/javascript" src="lib/pp_lexicon.js"></script>
+<script type="text/javascript" src="Base64.js"></script>
+<script type="text/javascript" src="lib/inventory.js"></script>
+<script type="text/javascript" src="integrationlibs/Rundeck.js"></script>
+<script type="text/javascript" src="integrationlibs/pcm.js"></script>
+<script type="text/javascript" src="lib/AuditPanel.js"></script>
+<script type="text/javascript" src="lib/SystemGrid.js"></script>
+<script type="text/javascript" src="lib/EntityEditorGrid.js"></script>
+<script type="text/javascript" src="lib/ChangesGrid.js"></script>
+<script type="text/javascript" src="lib/SystemViewPanel.js"></script>
+<script type="text/javascript" src="lib/ServiceViewPanel.js"></script>
+<script type="text/javascript" src="ux/form/ItemSelector.js"></script>
+<script type="text/javascript" src="ux/form/MultiSelect.js"></script>
+<script type="text/javascript" src="lib/EnvironmentServices.js"></script>
+<script type="text/javascript" src="lib/EnvironmentEditor.js"></script>
+<script type="text/javascript" src="lib/ExtFixes.js"></script>
+<script type="text/javascript" src="lib/KeyUploader.js"></script>
+<script type="text/javascript" src="integrationlibs/quicklinks.js"></script>
+
+<script>
+if(Ext.isIE)
+{
+	Ext.Msg.alert('IE not supported','Please use a supported browser (Firefox,Google Chrome (recommended),Safari).');
+}
+</script>
+
+<script>
+Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
+
+
+PP.saveRecord=function(r,callback){	
+	// if system is being set to 
+	if(typeof r.modified['status']!='undefined' && r.data.status=='production')
+	{
+		if(r.data.host_fqdn)
+		{
+			Ext.Msg.show({
+				msg: 'Checking parent host status',
+				progressText: 'In progress...',
+				wait:true,
+				waitConfig: {interval:200}     
+	          });		
+			var host_status='';
+			Ext.Ajax.request({
+				async:false,
+				url: PP.config.inv_api_path + 'system/' + r.data.host_fqdn,
+				success:function(r){
+						host_status=Ext.decode(r.responseText).status;
+						Ext.Msg.hide();		
+				},
+				failure:function(r){
+						Ext.Msg.hide();		
+			        Ext.Msg.alert('Lookup Failed', 'The parent host could not be found.');			
+				}
+			});
+			if(host_status!='production')
+			{
+				Ext.Msg.hide();	
+				r.reject();	
+				var sv=Ext.getCmp('system_view');
+				sv.getForm().loadRecord(r);
+		        Ext.Msg.alert('Update Failed', 'This system could not be updated to a production state, the parent host is not in a production state.  Changes have been reverted.');			
+				return;
+			}
+		}
+	}
+	r.save({
+		callback: function(t,op){
+			if(op.success)
+			{
+				r.commit();
+				PP.notify.msg('Success', 'Record saved');
+				
+			}
+			else
+			{
+		        Ext.Msg.alert('Update Failed', 'There was an error saving this record: <br> ' + op.response.responseText);
+			}
+			if(typeof callback =='function')
+			{
+				callback.call(this,op);					
+			}
+			console.log(arguments);
+			return op.success;
+		}
+	});
+}
+
+var userinfohtml='Username: ' + PP.currentUser + '<br>Access: ';
+if(PP.allowEditing)
+{
+	if(PP.user && PP.user.groups.match(/Admin/))
+	{
+		userinfohtml+='<a onclick="highlightAdmin();">admin</a>';						
+	}
+	else
+	{
+		userinfohtml+='read/write';			
+	}
+}
+else
+{
+	userinfohtml+='read-only';
+}
+function highlightAdmin(){
+	var node=Ext.getCmp('quicklinktree').store.getRootNode().childNodes[4];
+	Ext.getCmp('quicklinktree').view.getSelectionModel().select(node);
+	var e=Ext.get(Ext.getCmp('quicklinktree').view.getSelectedNodes()[0].childNodes[0].childNodes[0]);
+	e.highlight();
+	e.highlight();
+	node.expand(undefined,function(){
+		e.highlight();
+		e.highlight();		
+	});
+}
+
+function pendingChanges(fqdn)
+{
+	Ext.getCmp('mainview').setActiveTab(Ext.getCmp('changes'));
+	Ext.getCmp('changes').store.load({params:{entity_key:fqdn}});
+}
+
+
+PP.currentUser='';
+
+Ext.DomQuery.matchers.push({
+	re: /\.(\.+)/,
+	select: 'n=n[0]||root;for(var i="{1}".length;i>0;i--){n=n.parentNode};'
+});
+
+Ext.onReady(function(){
+	Ext.get('loading').destroy();
+	var sfields=[['','-none-']];
+	Ext.each(PP.getEntityFields('system'),function(f){
+		sfields.push([f,PP.getFieldLabel(f)]);
+	});
+	sfields.sort(function(a,b){
+		if(a[1] < b[1]) return -1;
+		if(a[1] > b[1]) return 1;
+		return 0;
+	});
+
+	Ext.define('qlnode',{
+		extend:'Ext.data.Model',
+		fields:['qtype','js','url','text','query']
+	});
+
+	PP.quicklinkstore=Ext.create('Ext.data.TreeStore',{
+		model:'qlnode',
+		proxy:{
+			type:'memory'
+		},
+		root:{
+			text:'root',
+			expanded:true,
+			children:[
+			    {text: 'My Queries',id: 'my_queries' ,loaded:true},
+			    {text:'Queries (Premade)',id: 'premade_queries', expanded:true},
+				{text: 'Reports',id: 'reports',expanded:true},
+				{text: 'Links', id: 'other_links',expanded:true},
+				{text: 'Admin Tools',expanded:false, children:[
+			{leaf:true,qtype:'js',text:'Roles',js:'var w=new Ext.Window({title:"Roles",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,autoScroll:true,region:"center",entity:"role",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
+					{leaf:true,qtype:'js',text:'VIP Editor',js:'var w=new Ext.Window({title:"VIPs",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"vip",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Device Extra IPs Editor',js:'var w=new Ext.Window({title:"Device IPs",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"device_ip",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Instance Size Editor',js:'var w=new Ext.Window({title:"Instance Sizes",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_size",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
+					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
+				]}
+			]
+			
+		}
+	})
+	var systemViewPanel=new PP.SystemViewPanel({
+		region: 'east',
+		title: 'System Info',
+		id: 'system_view',
+		collapsed: true,
+		collapsible: true,
+		stateful:true,
+		split: true,
+		// html: 'yay',
+		width: 450,
+		addNagiosPanel:PP.config.nagios		
+	});
+	
+	new Ext.container.Viewport({
+		layout:'border',
+		items:[
+			{
+				xtype:'panel',
+				layout:'column',
+				region:'north',
+				baseCls:'x-border-layout-ct',
+				height:44,
+				items:[
+					{
+						xtype:'panel',
+						id: 'headerspace',
+						baseCls: 'docs-header',
+						html: '<h1>' + PP.config.title +  '</h1>',
+						style: 'padding:10px;color: #416AA3;',
+						columnWidth: .6
+					},
+					{
+						xtype:'panel',
+						id: 'accessbox',
+						columnWidth: .4,
+						baseCls: 'docs-header',
+						style: 'text-align:right;padding:8px;font-size:8pt;',
+						html: userinfohtml
+						//bodyStyle: 'padding:10px'
+					}
+				]
+			},
+			{
+				xtype:'tabpanel',
+				activeTab:0,
+				region:'center',
+				id: 'mainview',
+				items:[
+					{
+						title: 'Systems',
+						layout: 'border',
+						items:[
+							new PP.SystemGrid({
+								id: 'system_grid',
+								region: 'center',
+								stateful:true,
+								listeners: {
+					                selectionchange: function(model, records) {
+					                    if (records[0]) {
+					                        systemViewPanel.load(records[0]);
+					                    }
+					                },
+									edit:function(e,ed){
+										systemViewPanel.load(e.grid.getSelectionModel().getSelection()[0]);
+									}
+					            }
+							}),
+							systemViewPanel
+						]
+					},
+					{
+						title: 'Services / Environments',
+						layout:'border',
+						items:[
+							new PP.EnvironmentServices({
+								id: 'service_grid',
+								region: 'center',
+								stateful:true,
+								defaultEnvironment: PP.config.default_environment
+							}),
+							new PP.ServiceViewPanel({
+								region: 'east',
+								editing:PP.allowEditing,
+								split:true,
+								id: 'service_view',
+								width:350
+							})
+						],
+						// listeners:{
+						// 	'activate': function(){
+						// 		Ext.StoreManager.get("environment_name_store").load(function() {
+						// 		    this.fireEvent("load");
+						// 		});
+						// 		
+						// 	}
+						// }
+					},
+					{
+						xtype:'panel',
+						title: 'Graph/Chart',
+						layout:'border',
+						dockedItems:[
+							{
+								xtype: 'toolbar',
+								dock:'top',
+								items:[
+ 									'<span style="font-size:9px;font-style:italic;">(uses active query in System tab)</span>',
+									{
+										xtype:'tbspacer'
+									},
+									'Chart Type: ',
+									{
+										xtype: 'combo',
+										name: 'chart_type',
+										id: 'chart_type',
+										mode: 'local',
+										value: 'stackedcolumn',
+										typeAhead: true,
+										selectOnFocus: true,
+										listeners:{
+											'expand':function(chart){
+												chart.store.clearFilter();
+											},
+											focus: function(f){
+												f.onTriggerClick();
+											}
+										},
+										store:[['column','Column'],['stackedcolumn','Stacked Column'],['stackedpercentcolumn','Stacked Column w/ %']]
+									},
+					
+								]
+							},
+							{
+								xtype: 'toolbar',
+								dock: 'top',
+								items:[
+								'Display: ',
+								{
+									xtype: 'combo',
+									name: 'verticaltype',
+									id: 'verticaltype',
+									mode: 'local',
+									width: 75,
+									typeAhead: true,
+									selectOnFocus: true,
+									value: 'count',
+									listeners:{
+										'expand':function(c){
+											c.store.clearFilter();
+										},	
+										focus: function(f){
+													f.onTriggerClick();
+										}
+									},
+									store:[['count','Count'],['sum','Sum']]
+								},
+								' of ',
+								{
+									xtype: 'combo',
+									listeners:{
+										'expand':function(c){
+											c.store.clearFilter();
+										},
+										focus: function(f){
+													f.onTriggerClick();
+										}
+									},
+									name: 'field1',
+									typeAhead: true,
+									selectOnFocus: true,
+									width:140,
+									id: 'field1',
+									mode: 'local',
+									value: 'fqdn',
+									store: sfields
+								},
+				
+								' by ',
+								{
+									xtype: 'combo',
+									listeners:{
+										'expand':function(c){
+											c.store.clearFilter();
+										},
+										focus: function(f){
+													f.onTriggerClick();
+										}
+									},
+									name: 'key1',
+									id: 'key1',
+									typeAhead: true,
+									selectOnFocus: true,
+									width:140,
+									mode: 'local',
+									value: '',
+									store: sfields
+								},
+								
+									' subdivided by <span style="font-size:9px;font-style:italic;">(optional)</span>',
+									{
+										xtype: 'combo',
+										listeners:{
+											'expand':function(c){
+												c.store.clearFilter();
+											},
+											focus: function(f){
+														f.onTriggerClick();
+											}
+										},
+										name: 'key2',
+										id: 'key2',
+										width:140,
+										mode: 'local',
+										value: '',
+										typeAhead: true,
+										store: sfields
+									},
+									{
+										xtype:'tbspacer'
+									},							
+									{
+										xtype: 'button',
+										text: 'Load Chart',
+										handler: PP.loadChart
+									},
+									{
+										xtype: 'button',
+										text: 'Perma Link',
+										handler: function () {
+											window.location = Ext.getCmp('system_grid').searchlink.el.dom.href
+											 + "#" + Ext.getCmp('key1').getValue();
+										}
+									}
+								]
+								}
+						],
+						
+						items: [
+							{
+								xtype:'panel',
+								layout:'fit',
+								id:'chartcontainer',
+								region:'center',
+								items:[
+								{
+									xtype:'panel',
+									html:''
+								}]
+							}
+							,
+							{
+								xtype:'grid',
+								region: 'south',
+								collapsible:true,
+								collasped:true,
+								split:true,
+								height:200,
+								title:'Chart Data',
+								id: 'chart_grid',
+								columns: [],
+								store: new Ext.data.JsonStore({fields:['tmp']})
+							}
+						]
+					},
+					new PP.ChangesGrid({
+						title:'Pending Changes',
+						id: 'changes'
+					})
+				]
+			},
+			{
+				xtype:'panel',
+				title: 'QuickLinks',
+				region: 'west',
+				id:'quicklinkpanel',
+				collapsible: true,
+				collapsed: true,
+				split: true,
+				stateful: true,
+				layout: 'fit',
+				width: 200,
+				items:[
+					{
+						xtype: 'treepanel',
+						id: 'quicklinktree',
+						// collapsed: true,
+						rootVisible:false,
+				        useArrows: true,
+						store: PP.quicklinkstore,
+						listeners:{
+							itemclick: function(v,rec,hi,idx,e){
+								if(typeof rec.data.qtype!='undefined')
+								{
+									if(rec.data.qtype=='query' && typeof rec.data.query!='undefined')
+									{
+										Ext.getCmp('system_grid').loadSearch(rec.data.query);							
+										return;
+									}
+									if(rec.data.qtype=='js' && typeof rec.data.js!='undefined')
+									{
+										eval(rec.data.js);							
+										return;
+									}
+									if(rec.data.qtype=='url' && typeof rec.data.url!='undefined')
+									{
+										window.location=rec.data.url;							
+										return;
+									}
+						
+						
+								}
+							}
+						}
+					}
+				]
+			}
+		]
+	});
+	
+	// Post app setup, do things that need all the components done.
+    
+    var sys_grid=Ext.getCmp('system_grid');
+    
+	if(typeof window.location.search!=undefined && window.location.search.length)
+	{
+		var q=window.location.search.replace(/\?/,'').split(/;|&/);
+		if(window.location.hash!=undefined && window.location.hash.length)	
+		{
+			var report=window.location.hash.replace(/\#/,'');
+			sys_grid.getStore().on('load',function(){
+					PP.loadReport(report);
+				},
+				sys_grid,
+				{
+					single:true
+				}
+			);		
+		}	
+		sys_grid.loadSearch(q);
+	}
+	// set default search to include status!=decommissioned
+	else
+	{		
+		sys_grid.addSearchBar();
+		var new_bar=sys_grid.getDockedItems('toolbar[dock=top]')[0];
+		new_bar.items.items[1].setValue('status');
+		new_bar.items.items[2].setValue('!=');
+		new_bar.items.items[3].setValue('decommissioned');
+	}
+	var quicklink_keys=Object.keys(PP.quicklinks);
+	for(var i=0; i < quicklink_keys.length ; i++){
+		if( i != undefined && quicklink_keys[i] != undefined && PP.quicklinkstore.getNodeById(quicklink_keys[i]) != undefined) {
+		PP.quicklinkstore.getNodeById(quicklink_keys[i]).appendChild(PP.quicklinks[quicklink_keys[i]]);			
+		}
+	}
+	PP.loadSavedQueries();
+	if(PP.user && PP.user.groups.match(/Admin/))
+	{
+		Ext.getCmp('quicklinktree').store.getRootNode().childNodes[4].appendChild([
+			{leaf:true,qtype:'js',text:'Users',js:'var w=new Ext.Window({title:"Users",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"user",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
+			{leaf:true,qtype:'js',text:'ACL',js:'var w=new Ext.Window({title:"ACL",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"acl",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
+			{leaf:true,qtype:'js',text:'Normalizers',js:'var w=new Ext.Window({title:"Normalizers",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"inv_normalizer",startQuery:"*",lexicon:PP.lexicon})]});w.show();'}
+		]);
+	}
+
+	window.document.title=PP.config.title;
+});
+
+
+</script>
+</body>
+</html>
