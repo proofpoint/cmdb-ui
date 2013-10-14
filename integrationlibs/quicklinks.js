@@ -9,7 +9,7 @@ PP.quicklinks={
     reports: [{ leaf: true, qtype:'js',text:'Summarize by Environment', js: 'PP.loadReport("environment_name");'},
         {leaf: true, qtype:'js',text:'Summarize by Creator', js: 'PP.loadReport("created_by");'}
         ],
-    other_links: [/
+    other_links: [
         {leaf:true,qtype:'js',text:'Graphite',js:'window.location="/graphite/index.html";'},
         {leaf:true,qtype:'js',text:'Nagios Monitoring',js:'window.location="/nagui/index.html";'},
         {leaf:true,qtype:'js',text:'LogStash',js:'window.location="/logstash/";'},
