@@ -297,11 +297,9 @@ Ext.onReady(function(){
 				{text: 'Links', id: 'other_links',expanded:true},
 				{text: 'Admin Tools',expanded:false, children:[
 			{leaf:true,qtype:'js',text:'Roles',js:'var w=new Ext.Window({title:"Roles",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,autoScroll:true,region:"center",entity:"role",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
-					{leaf:true,qtype:'js',text:'VIP Editor',js:'var w=new Ext.Window({title:"VIPs",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"vip",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Data Center Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"data_center",startQuerytype:"data_center_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
-					{leaf:true,qtype:'js',text:'Device Extra IPs Editor',js:'var w=new Ext.Window({title:"Device IPs",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"device_ip",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
-					{leaf:true,qtype:'js',text:'Instance Size Editor',js:'var w=new Ext.Window({title:"Instance Sizes",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_size",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
 					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
 				]}
 			]
@@ -321,6 +319,44 @@ Ext.onReady(function(){
 		addNagiosPanel:PP.config.nagios		
 	});
 	
+	var environtment_services_panel=new PP.EnvironmentServices({
+		id: 'service_grid',
+		region: 'center',
+		stateful:true,
+		defaultEnvironment: PP.config.default_environment
+	});
+
+	var service_view_panel = new PP.ServiceViewPanel({
+		region: 'east',
+		editing:PP.allowEditing,
+		split:true,
+		id: 'service_view',
+		width:350
+	})
+
+	// tie the grid to the service_view_panel
+	environtment_services_panel.getStore().addListener({
+		'load':function(){
+			service_view_panel.reset();	
+		}
+	});
+	environtment_services_panel.addListener({
+        'selectionchange': {
+			scope: environtment_services_panel,
+			fn: function(model, records) {
+				if (records.length > 0 && records[records.length - 1]) {		
+					service_view_panel.getEl().unmask();
+					var rec = records[records.length - 1]
+					service_view_panel.load(rec);
+					if(rec.get('environment_name')!= environtment_services_panel.selectedEnvironment.get('name'))
+					{
+						service_view_panel.getEl().mask();
+					}
+				}
+			}
+        }
+	})
+
 	new Ext.container.Viewport({
 		layout:'border',
 		items:[
@@ -381,21 +417,7 @@ Ext.onReady(function(){
 					{
 						title: 'Services / Environments',
 						layout:'border',
-						items:[
-							new PP.EnvironmentServices({
-								id: 'service_grid',
-								region: 'center',
-								stateful:true,
-								defaultEnvironment: PP.config.default_environment
-							}),
-							new PP.ServiceViewPanel({
-								region: 'east',
-								editing:PP.allowEditing,
-								split:true,
-								id: 'service_view',
-								width:350
-							})
-						],
+						items:[ environtment_services_panel, service_view_panel ],
 						// listeners:{
 						// 	'activate': function(){
 						// 		Ext.StoreManager.get("environment_name_store").load(function() {

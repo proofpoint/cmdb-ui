@@ -16,6 +16,11 @@ limitations under the License.
 body{
 	background-color:#ddd;
 }
+.cmdb_display_field { 
+    border: 1px dotted gray;
+    padding-left: 3px;
+    padding-bottom: 2px;
+}
 .pageloading
 {
 	background-color:white;
