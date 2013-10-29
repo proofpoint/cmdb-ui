@@ -302,7 +302,7 @@ PP.createNewInstance=function(config)
 			// 				},
 			// 				failure: function(){
 			// 					Ext.MessageBox.hide();
-			// 					Ext.Msg.alert("Error",'Failed to find new instance in inventory.  Server returned ' + op.error.status + ": " + op.error.statusText);								
+			// 					Ext.Msg.alert("Error",'Failed to find new instance in cmdb.  Server returned ' + op.error.status + ": " + op.error.statusText);								
 			// 				}
 			// 			});						
 			// 		}

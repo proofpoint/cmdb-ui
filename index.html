@@ -17,7 +17,7 @@ limitations under the License.
 <head>
 	<title>Ops Inv (ext4)</title>
 	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-debug.css" />
-	<link rel="stylesheet" type="text/css" href="inventory.css" />
+	<link rel="stylesheet" type="text/css" href="cmdb.css" />
 	<link rel="stylesheet" type="text/css" href="ux/grid/css/GridFilters.css" />
 	<link rel="stylesheet" type="text/css" href="custom.css" />
 </head>
@@ -81,7 +81,7 @@ if(typeof PP == 'undefined')
 // Load the config syncronously, then parse it for setup
 
 PP.config={};
-var url = 'inventory.cfg?_dc=' + Ext.Date.format(new Date(),'U'),
+var url = 'cmdb.cfg?_dc=' + Ext.Date.format(new Date(),'U'),
 fileName = url.split('/').pop(),
 xhr, status, onScriptError;
 
@@ -137,7 +137,7 @@ else {
 </script>
 <script type="text/javascript" src="lib/pp_lexicon.js"></script>
 <script type="text/javascript" src="Base64.js"></script>
-<script type="text/javascript" src="lib/inventory.js"></script>
+<script type="text/javascript" src="lib/cmdb.js"></script>
 <script type="text/javascript" src="integrationlibs/Rundeck.js"></script>
 <script type="text/javascript" src="integrationlibs/pcm.js"></script>
 <script type="text/javascript" src="lib/AuditPanel.js"></script>
