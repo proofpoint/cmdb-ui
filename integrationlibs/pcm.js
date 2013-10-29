@@ -526,7 +526,7 @@ PP.newInstanceWindow=function (){
 						autoLoad:true,
 						proxy: {
 							type: 'ajax',
-							url: PP.config.inv_api_path + 'role/',
+							url: PP.config.cmdb_api_path + 'role/',
 							startParam: undefined,
 							pageParam: undefined,
 							limitParam: undefined,

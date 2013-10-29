@@ -180,7 +180,7 @@ PP.saveRecord=function(r,callback){
 			var host_status='';
 			Ext.Ajax.request({
 				async:false,
-				url: PP.config.inv_api_path + 'system/' + r.data.host_fqdn,
+				url: PP.config.cmdb_api_path + 'system/' + r.data.host_fqdn,
 				success:function(r){
 						host_status=Ext.decode(r.responseText).status;
 						Ext.Msg.hide();		
