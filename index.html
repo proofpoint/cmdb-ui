@@ -341,6 +341,10 @@ Ext.onReady(function(){
 	environtment_services_panel.getStore().addListener({
 		'load':function(){
 			service_view_panel.reset();	
+			if(environtment_services_panel.selectedService)
+			{
+				service_view_panel.load(environtment_services_panel.getStore().getAt(environtment_services_panel.getStore().find('name',environtment_services_panel.selectedService)));
+			}
 		}
 	});
 	environtment_services_panel.addListener({
