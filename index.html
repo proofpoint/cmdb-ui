@@ -130,6 +130,16 @@ if (status >= 200 && status < 300) {
 		console.log('loading custom extension for LogStash')
 		Ext.Loader.loadScript("integrationlibs/LogPanel.js");
 	}
+	if(PP.config.pcm_api)
+	{
+		console.log('loading custom extension for PCM (cloud mgmt)')
+		Ext.Loader.loadScript("integrationlibs/pcm.js");		
+	}
+	if(PP.config.rundeck_api)
+	{
+		console.log('loading custom extension for rundeck')
+		Ext.Loader.loadScript("integrationlibs/Rundeck.js");		
+	}
 }
 else {
     onError.call(this, "Failed loading synchronously via XHR: '" + url + "'; please " +
@@ -141,8 +151,6 @@ else {
 <script type="text/javascript" src="lib/pp_lexicon.js"></script>
 <script type="text/javascript" src="Base64.js"></script>
 <script type="text/javascript" src="lib/cmdb.js"></script>
-<script type="text/javascript" src="integrationlibs/Rundeck.js"></script>
-<script type="text/javascript" src="integrationlibs/pcm.js"></script>
 <script type="text/javascript" src="lib/AuditPanel.js"></script>
 <script type="text/javascript" src="lib/SystemGrid.js"></script>
 <script type="text/javascript" src="lib/EntityEditorGrid.js"></script>
@@ -302,6 +310,7 @@ Ext.onReady(function(){
 			{leaf:true,qtype:'js',text:'Roles',js:'var w=new Ext.Window({title:"Roles",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,autoScroll:true,region:"center",entity:"role",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Data Center Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"data_center",startQuerytype:"data_center_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Rack Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"rack",startQuerytype:"rack_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
 				]}
@@ -693,7 +702,7 @@ Ext.onReady(function(){
 		}
 	}
 	PP.loadSavedQueries();
-	if(PP.user && PP.user.groups.match(/Admin/))
+	if(PP.user && PP.user.groups && PP.user.groups.match(/Admin/))
 	{
 		Ext.getCmp('quicklinktree').store.getRootNode().childNodes[4].appendChild([
 			{leaf:true,qtype:'js',text:'Users',js:'var w=new Ext.Window({title:"Users",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"user",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
