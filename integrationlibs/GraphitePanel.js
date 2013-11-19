@@ -53,7 +53,7 @@ Ext.define('PP.GraphitePanel',{
         graphUrl+= "&width=" + this.centerRegion.getBox().width + "&height=" + this.centerRegion.getBox().height;
         for(var l=0;l<targets.length;l++)
         {
-            graphUrl+= "&target=service." + targets[l].replace(/\./g,'_') + "." + this.currentGraph.metric;
+            graphUrl+= "&target=" + PP.config.graphiteMetricsPrefix +  "." + targets[l].replace(/\./g,'_') + "." + this.currentGraph.metric;
         }
         graphUrl+= "&_uniq=0.9507563426159322&hideLegend=false&title=" + this.currentGraph.metric;
         this.layout.centerRegion.update("<img src='" + graphUrl + "'>");
@@ -75,7 +75,7 @@ Ext.define('PP.GraphitePanel',{
         }
         var targets=this.system_fqdn.split(',');
         this.westRegion.setRootNode({
-            id: 'service.' + targets[0].replace(/\./g,'_'),
+            id: PP.config.graphiteMetricsPrefix + '.' + targets[0].replace(/\./g,'_'),
             text: system_fqdn
         });
     },
@@ -143,7 +143,7 @@ Ext.define('PP.GraphitePanel',{
                     fn: function(view,rec) {
                         console.log(rec);    
                         var gpanel=view.up('panel[xtype=graphitepanel]');
-                        gpanel.currentGraph.metric=rec.parentNode.data.text + '.' + rec.data.text;
+                        gpanel.currentGraph.metric=rec.id.replace(rec.store.getRootNode().id + '.','');
                         rec.getOwnerTree().collapse();
                         gpanel.setGraph();
                     },
@@ -154,7 +154,7 @@ Ext.define('PP.GraphitePanel',{
                         {
                             return;
                         }
-                        var node_id = node.id.replace(/^[A-Za-z.\-0-9]+.service/,"service");
+                        var node_id = node.id.replace(/^[A-Za-z.\-0-9]+./,'*');
                         var proxy=node.getOwnerTree().getStore().getProxy();
                         proxy.setExtraParam('query', (node_id == "") ? "*" : (node_id + ".*"));
                         proxy.setExtraParam('format' , 'treejson');
