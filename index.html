@@ -21,6 +21,7 @@ limitations under the License.
 	<link rel="stylesheet" type="text/css" href="cmdb.css" />
 	<link rel="stylesheet" type="text/css" href="ux/grid/css/GridFilters.css" />
 	<link rel="stylesheet" type="text/css" href="extjs/resources/ext-theme-gray/ext-theme-gray-all.css" />
+	<link rel="stylesheet" type="text/css" href="highlight.css" />
 	<link rel="stylesheet" type="text/css" href="custom.css" />
  
 </head>
@@ -374,13 +375,13 @@ Ext.onReady(function(){
 
 	new Ext.container.Viewport({
 		layout:'border',
-		componentCls: 'cmdb-background',
+		componentCls: 'cmdb-background-' + PP.config.highlight_color,
 		items:[
 			{
 				xtype:'panel',
 				layout:'column',
 				region:'north',
-				bodyCls: 'cmdb-header',
+				bodyCls: 'cmdb-header-' + PP.config.highlight_color,
 				baseCls:'x-border-layout-ct',
 				height:44,
 				items:[
@@ -388,7 +389,8 @@ Ext.onReady(function(){
 						xtype:'panel',
 						id: 'headerspace',
 						baseCls: 'docs-header',
-						html: '<h1>' + PP.config.title +  '</h1>',
+						// bodyStyle: "background-image: url('" + PP.config.logo_path + "'); background-size: 2.75rem 2.75rem",
+						html: PP.config.logo + '<h1>' + PP.config.title +  '</h1>',
 						style: 'padding:10px;color: #416AA3;',
 						columnWidth: .6
 					},
@@ -409,7 +411,7 @@ Ext.onReady(function(){
 				region:'center',
 				id: 'mainview',
 				tabBar:{
-					baseCls:'cmdb-tab-bar'
+					baseCls:'cmdb-tab-bar-'  + PP.config.highlight_color
 				},
 				items:[
 					{

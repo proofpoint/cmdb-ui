@@ -1,0 +1,282 @@
+
+
+.cmdb-transparent-background{
+    background: transparent;
+}
+.cmdb-panel-body.x-panel-body-default{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* green */
+
+.cmdb-header-green, .cmdb-header-green h1{
+    background-color: green;
+    color: #ffffff;
+}
+.cmdb-background-green {
+    background-color: green;
+}
+
+.cmdb-tab-bar-green {
+    border: 0px;
+    background-color: green;
+    background-image: -webkit-linear-gradient(top,green,#d2d2d2);
+    background-image: -moz-linear-gradient(top,green,#d2d2d2);
+    background-image: -o-linear-gradient(top,green,#d2d2d2);
+}
+.cmdb-transparent-background-green{
+    background: transparent;
+}
+.cmdb-panel-body-green .x-panel-body-default-green{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-green {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-green {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* forestgreen */
+
+.cmdb-header-forestgreen, .cmdb-header-forestgreen h1{
+    background-color: forestgreen;
+    color: #ffffff;
+}
+.cmdb-background-forestgreen {
+    background-color: forestgreen;
+}
+
+.cmdb-tab-bar-forestgreen {
+    border: 0px;
+    background-color: forestgreen;
+    background-image: -webkit-linear-gradient(top,forestgreen,#d2d2d2);
+    background-image: -moz-linear-gradient(top,forestgreen,#d2d2d2);
+    background-image: -o-linear-gradient(top,forestgreen,#d2d2d2);
+}
+.cmdb-transparent-background-forestgreen{
+    background: transparent;
+}
+.cmdb-panel-body-forestgreen .x-panel-body-default-forestgreen{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-forestgreen {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-forestgreen {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* blue */
+
+.cmdb-header-blue, .cmdb-header-blue h1{
+    background-color: blue;
+    color: #ffffff;
+}
+.cmdb-background-blue {
+    background-color: blue;
+}
+
+.cmdb-tab-bar-blue {
+    border: 0px;
+    background-color: blue;
+    background-image: -webkit-linear-gradient(top,blue,#d2d2d2);
+    background-image: -moz-linear-gradient(top,blue,#d2d2d2);
+    background-image: -o-linear-gradient(top,blue,#d2d2d2);
+}
+.cmdb-transparent-background-blue{
+    background: transparent;
+}
+.cmdb-panel-body-blue .x-panel-body-default-blue{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-blue {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-blue {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* red */
+
+.cmdb-header-red, .cmdb-header-red h1{
+    background-color: red;
+    color: #ffffff;
+}
+.cmdb-background-red {
+    background-color: red;
+}
+
+.cmdb-tab-bar-red {
+    border: 0px;
+    background-color: red;
+    background-image: -webkit-linear-gradient(top,red,#d2d2d2);
+    background-image: -moz-linear-gradient(top,red,#d2d2d2);
+    background-image: -o-linear-gradient(top,red,#d2d2d2);
+}
+.cmdb-transparent-background-red{
+    background: transparent;
+}
+.cmdb-panel-body-red .x-panel-body-default-red{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-red {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-red {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* dimgray */
+
+.cmdb-header-dimgray, .cmdb-header-dimgray h1{
+    background-color: dimgray  ;
+    color: #ffffff;
+}
+.cmdb-background-dimgray {
+    background-color: dimgray;
+}
+
+.cmdb-tab-bar-dimgray {
+    border: 0px;
+    background-color: dimgray;
+    background-image: -webkit-linear-gradient(top,dimgray,#d2d2d2);
+    background-image: -moz-linear-gradient(top,dimgray,#d2d2d2);
+    background-image: -o-linear-gradient(top,dimgray,#d2d2d2);
+}
+.cmdb-transparent-background-dimgray{
+    background: transparent;
+}
+.cmdb-panel-body-dimgray .x-panel-body-default-dimgray{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-dimgray {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-dimgray {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+
+/* goldenrod */
+
+.cmdb-header-goldenrod, .cmdb-header-goldenrod h1{
+    background-color: goldenrod  ;
+    color: #ffffff;
+}
+.cmdb-background-goldenrod {
+    background-color: goldenrod;
+}
+
+.cmdb-tab-bar-goldenrod {
+    border: 0px;
+    background-color: goldenrod;
+    background-image: -webkit-linear-gradient(top,goldenrod,#d2d2d2);
+    background-image: -moz-linear-gradient(top,goldenrod,#d2d2d2);
+    background-image: -o-linear-gradient(top,goldenrod,#d2d2d2);
+}
+.cmdb-transparent-background-goldenrod{
+    background: transparent;
+}
+.cmdb-panel-body-goldenrod .x-panel-body-default-goldenrod{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-goldenrod {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-goldenrod {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* darkcyan */
+
+.cmdb-header-darkcyan, .cmdb-header-darkcyan h1{
+    background-color: darkcyan  ;
+    color: #ffffff;
+}
+.cmdb-background-darkcyan {
+    background-color: darkcyan;
+}
+
+.cmdb-tab-bar-darkcyan {
+    border: 0px;
+    background-color: darkcyan;
+    background-image: -webkit-linear-gradient(top,darkcyan,#d2d2d2);
+    background-image: -moz-linear-gradient(top,darkcyan,#d2d2d2);
+    background-image: -o-linear-gradient(top,darkcyan,#d2d2d2);
+}
+.cmdb-transparent-background-darkcyan{
+    background: transparent;
+}
+.cmdb-panel-body-darkcyan .x-panel-body-default-darkcyan{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-darkcyan {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-darkcyan {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
+
+/* maroon */
+
+.cmdb-header-maroon, .cmdb-header-maroon h1{
+    background-color: maroon  ;
+    color: #ffffff;
+}
+.cmdb-background-maroon {
+    background-color: maroon;
+}
+
+.cmdb-tab-bar-maroon {
+    border: 0px;
+    background-color: maroon;
+    background-image: -webkit-linear-gradient(top,maroon,#d2d2d2);
+    background-image: -moz-linear-gradient(top,maroon,#d2d2d2);
+    background-image: -o-linear-gradient(top,maroon,#d2d2d2);
+}
+.cmdb-transparent-background-maroon{
+    background: transparent;
+}
+.cmdb-panel-body-maroon .x-panel-body-default-maroon{
+    background-color:#E0E0E0;
+}
+
+.cmdb-panel-body-maroon {
+    background-color:#E0E0E0;
+}
+.cmdb-panel-background-maroon {
+    background-color:#D0D0D0;
+    padding:4px;
+    font-size:7pt;
+}
