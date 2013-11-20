@@ -53,7 +53,8 @@ Ext.define('PP.GraphitePanel',{
         graphUrl+= "&width=" + this.centerRegion.getBox().width + "&height=" + this.centerRegion.getBox().height;
         for(var l=0;l<targets.length;l++)
         {
-            graphUrl+= "&target=" + PP.config.graphiteMetricsPrefix +  "." + targets[l].replace(/\./g,'_') + "." + this.currentGraph.metric;
+            var fqdn=targets[l].split('.');
+            graphUrl+= "&target=" + PP.config.graphiteMetricsPrefix +  "." + fqdn[0] + "*." + this.currentGraph.metric;
         }
         graphUrl+= "&_uniq=0.9507563426159322&hideLegend=false&title=" + this.currentGraph.metric;
         this.layout.centerRegion.update("<img src='" + graphUrl + "'>");
@@ -74,8 +75,10 @@ Ext.define('PP.GraphitePanel',{
             this.westRegion=this.down('panel[region=west]');
         }
         var targets=this.system_fqdn.split(',');
+        var fqdn=targets[0].split('.');
+
         this.westRegion.setRootNode({
-            id: PP.config.graphiteMetricsPrefix + '.' + targets[0].replace(/\./g,'_'),
+            id: PP.config.graphiteMetricsPrefix + '.' + fqdn[0] + '*',
             text: system_fqdn
         });
     },
