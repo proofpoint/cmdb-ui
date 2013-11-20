@@ -90,6 +90,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
                 type: 'hbox',
                 align: 'stretch'
             },
+            bodyStyle: 'background:transparent;',
             items: [
                 me.fromField,
                 {
