@@ -18,7 +18,7 @@ Ext.define('PP.GraphitePanel',{
     frame:true,
     layout:'border',
     currentGraph:{
-        metric: 'CPU.cpu_user',
+        metric: PP.config.graphiteDefaultMetric,
         from: '-12hours',
         until: 'now'
     },
