@@ -132,6 +132,11 @@ if (status >= 200 && status < 300) {
 		console.log('loading custom extension for LogStash')
 		Ext.Loader.loadScript("integrationlibs/LogPanel.js");
 	}
+	if(PP.config.enableSplunk)
+	{
+		console.log('loading custom extension for Splunk')
+		Ext.Loader.loadScript("integrationlibs/Splunk.js");
+	}
 	if(PP.config.pcm_api)
 	{
 		console.log('loading custom extension for PCM (cloud mgmt)')
