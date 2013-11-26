@@ -130,17 +130,15 @@ if(PP.config.enableSplunk)
             },
             {
                 xtype:'tbfill'
+            },
+            {
+                xtype: 'button',
+                text:'Splunk',
+                handler: function(){
+                    var splunkurl= PP.config.splunk_server + 'search%20host%3D' + this.up('panel').system_fqdn.split('.')[0] + '*';
+                    window.open(splunkurl,'_blank');
+                }
             }
-            // ,
-            // {
-            //     xtype: 'box',
-            //     autoEl: {
-            //         tag: 'a',
-            //         target: '_blank',
-            //         href: 'http://' + PP.config.logstash_server + '/',
-            //         cn: 'LogStash UI'
-            //     }
-            // }
         ],
         viewConfig:{
             loadMask:true
