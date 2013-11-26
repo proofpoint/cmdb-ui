@@ -51,12 +51,15 @@ if(PP.config.enableSplunk)
         extend: 'Ext.data.Model',
         // idProperty: 'entity_key',
         fields:[
-        { name:'timestamp',mapping:'_time'},
+        { name:'timestamp',mapping:'_time',type:'date'},
         { name: 'type', mapping: 'sourcetype'},
-        { name: 'message', mapping: '_raw'},
         { name: 'source_host', mapping: 'host'},
         { name: 'program', mapping: 'process'},
-        { name: 'processId', mapping: 'pid'}
+        { name: 'processId', mapping: 'pid'},
+        { name: 'message', mapping: '_raw', convert: function(v,rec){
+                return v.split('[' + rec.get('processId') + ']: ')[1] || v;
+            }
+        }
         ],
         remoteSort: false,
         proxy:{
@@ -152,11 +155,11 @@ if(PP.config.enableSplunk)
             autoLoad:false
         }),
         columns:[
-            {header:'Date',flex:1,dataIndex:'timestamp',sortable:true,filterable:true},
+            {header:'Date',flex:1,xtype:'datecolumn',format:'c',dataIndex:'timestamp',sortable:true,filterable:true},
             {header:'Host',flex:1,dataIndex:'source_host',hidden:true,sortable:true,filterable:true},
+            {header:'Program',dataIndex:'program',sortable:true,filterable:true,width:50},
+            {header:'ProcessID',flex:1,dataIndex:'processId', hidden:true,sortable:true,filterable:true},
             {header:'Message',flex:2,dataIndex:'message',sortable:true,filterable:false},
-            {header:'Program',flex:1,dataIndex:'program',sortable:true,filterable:true},
-            {header:'ProcessID',flex:1,dataIndex:'processId', hidden:true,sortable:true,filterable:true}
         ],
         load: function(system_fqdn)
         {
