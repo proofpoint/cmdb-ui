@@ -20,6 +20,7 @@ limitations under the License.
 	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-debug.css" />
 	<link rel="stylesheet" type="text/css" href="cmdb.css" />
 	<link rel="stylesheet" type="text/css" href="ux/grid/css/GridFilters.css" />
+	<link rel="stylesheet" type="text/css" href="ux/panel/css/Rack.css" />
 	<link rel="stylesheet" type="text/css" href="extjs/resources/ext-theme-gray/ext-theme-gray-all.css" />
 	<link rel="stylesheet" type="text/css" href="highlight.css" />
 	<link rel="stylesheet" type="text/css" href="custom.css" />
@@ -69,7 +70,8 @@ Ext.require([
     'Ext.ux.form.ItemSelector',
 	'Ext.ux.exporter.Button',
 	'Ext.ux.grid.ColumnsConfig',
-	'Ext.ux.grid.FiltersFeature'
+	'Ext.ux.grid.FiltersFeature',
+	'Ext.ux.panel.Rack'
 ]);
 
 if(typeof PP == 'undefined')
@@ -179,7 +181,7 @@ if(Ext.isIE)
 
 <script>
 Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
-
+Ext.tip.QuickTipManager.init();
 
 PP.saveRecord=function(r,callback){	
 	// if system is being set to 
@@ -315,14 +317,14 @@ Ext.onReady(function(){
 			{leaf:true,qtype:'js',text:'Roles',js:'var w=new Ext.Window({title:"Roles",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,autoScroll:true,region:"center",entity:"role",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Data Center Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"data_center",startQuerytype:"data_center_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
-					{leaf:true,qtype:'js',text:'Rack Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"rack",startQuerytype:"rack_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
+					{leaf:true,qtype:'js',text:'Rack Editor(admin)',js:'PP.showRackEditor()'},
 					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
 				]}
 			]
 			
 		}
-	})
+	});
 	var systemViewPanel=new PP.SystemViewPanel({
 		region: 'east',
 		title: 'System Info',

@@ -1,0 +1,51 @@
+.racktable {
+    /*border: 1px solid gray;*/
+    border-bottom: 1px gray;
+    /*height: 400px;*/
+    font-size: 11px;
+}
+.racktable td.udata {
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    padding-left: 3px;
+    max-width: 300px;
+}
+.racktable td.ulabel {
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.racktable .last td.udata {
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    width: 200px;
+}
+.racktable td.udataspan, .racktable .last td.udataspan {
+    /*border-left: 1px solid gray;*/
+}
+.racktable .last td.ulabel {
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+.racktable td.ru1 {
+    background-color: lavender;
+    float: left;
+}
+.racktable td.ru2 {
+    background-color: lightblue;
+    float: left;
+
+}
+.racktable td.ru3 {
+    background-color: lightskyblue;
+    float: left;
+}
+.racktable td.ru4 {
+    background-color: lightcyan;
+    float: left;
+}
+.racktable td.rowhighlight {
+    background-color: yellow;
+}
