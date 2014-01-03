@@ -119,10 +119,20 @@ if (status >= 200 && status < 300) {
 		Ext.Loader.loadScript(PP.config.nagios_path + 'lib/Nagios.js');
 		Ext.Loader.loadScript('integrationlibs/nagui_integration.js');
 	}
-	if(PP.config.enableGraphite)
+	if(PP.config.graphite.enable)
 	{
 		console.log('loading custom extension for Graphite')
 		Ext.Loader.loadScript("integrationlibs/GraphitePanel.js");
+		if (typeof Graphite == 'undefined') {
+	    Ext.namespace('Graphite');
+		    Graphite.log = function(log) {
+		        if (window.console) {
+		            console.log(log);
+		        }
+		    }
+		}
+		Graphite.config=PP.config.graphite;
+
 	}
 	if(PP.config.jira)
 	{
