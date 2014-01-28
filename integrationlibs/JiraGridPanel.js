@@ -12,7 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+if (PP.config.jiraRESTbridge) {
+    Ext.Ajax.request({
+        url: PP.config.jira_path + 'status',
+        method: 'GET',
+        failure: function(r, o) {
+            Ext.Msg.confirm('Error', 'Unable to access Jira. Proceed to Jira and authorize CMDB to make requests?',
+                function(btn) {
+                    if (btn != 'no') {
+                        var currentLocation = window.location;
+                        window.location = currentLocation.origin + PP.config.jira_path + "status" + "?callback=" + currentLocation.href;
+                    } else {
+                        PP.config.jira = false;
+                    }
+                });
+            return;
+        }
+    });
+}
 if (!Ext.ModelManager.getModel('jira_issue')) {
 
     if (PP.config.jiraRESTbridge) {
@@ -128,25 +145,40 @@ Ext.define('PP.JiraGridPanel', {
         sortable: true,
         id: 'summary'
     }],
-    load: function(system) {
-        if (!system) {
-            return;
-        }
-        if (system) this.system = system;
-        // strip domain name from hosts
-        var hostname = this.system.split('.');
-        this.system = hostname[0];
-        if (this.system.length < 5) {
-            return;
-        }
-        this.jql = 'summary ~ "' + this.system + '" OR description ~ "' + this.system + '" OR comment ~ "' + this.system + '"';
-        //this.store.load();
-        this.store.load({
-            params: {
-                jql: this.jql
+    listeners: {
+        'activate': {
+            fn: function(p) {
+                p.load();
             }
-        });
-        PP.log('JiraGridPanel load: ' + this.system);
+        },
+        'boxready': {
+            fn: function(p) {
+                p.load();
+            }
+        }
+    },
+    load: function(system) {
+        if (system) {
+            if (this.system != system) {
+                this.loaded = false;
+            }
+            // strip domain name from hosts
+            var hostname = system.split('.');
+            this.system = hostname[0];
+        }
+        if (!this.loaded && this.isVisible() && this.system) {
+
+            if (this.system.length < 5) {
+                return;
+            }
+            this.jql = 'summary ~ "' + this.system + '" OR description ~ "' + this.system + '" OR comment ~ "' + this.system + '"';
+            this.store.load({
+                params: {
+                    jql: this.jql
+                }
+            });
+            PP.log('JiraGridPanel load: ' + this.system);
+        }
     },
     initComponent: function() {
         this.store = new Ext.data.Store({
