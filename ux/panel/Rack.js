@@ -17,7 +17,7 @@ Ext.define('Ext.ux.panel.Rack',
     extend: 'Ext.panel.Panel',
     alias: 'widget.rack',
     elevation_start: 'bottom',
-    elevation_max: 42,
+    elevation_max: 45,
     elevation_beginning: 1,
     position_key: 'position',
     ru_size_key: undefined,
@@ -124,10 +124,6 @@ Ext.define('Ext.ux.panel.Rack',
             // check to see if entry spans multiple ru then do some rowspan stuff
             if (this.ru_size_key && this.positions[u] && this.positions[u].get(this.ru_size_key) && (this.positions[u].get(this.ru_size_key) * 1) > 1)
             {
-                if (this.racktablespec.children[current_pos] == undefined)
-                {
-                    debugger;
-                }
                 // adjust the rowspan to the size of the box ( in ru )
                 rowspan = this.positions[u].get(this.ru_size_key);
                 this.racktablespec.children[current_pos].children[1].rowspan = rowspan;
