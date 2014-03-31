@@ -6,8 +6,8 @@
 }
 .racktable td.udata {
     border-top: 1px solid gray;
-    border-right: 1px solid gray;
-    border-left: 1px solid gray;
+    border-right: 4px solid gray;
+    border-left: 4px solid gray;
     padding-left: 3px;
     max-width: 300px;
 }
@@ -18,8 +18,13 @@
     padding-right: 3px;
 }
 .racktable .last td.udata {
-    border-right: 1px solid gray;
-    border-bottom: 1px solid gray;
+    border-right: 4px solid gray;
+    border-bottom: 4px solid gray;
+    width: 200px;
+}
+.racktable .first td.udata {
+    border-right: 4px solid gray;
+    border-top: 4px solid gray;
     width: 200px;
 }
 .racktable td.udataspan, .racktable .last td.udataspan {

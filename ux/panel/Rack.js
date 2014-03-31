@@ -102,7 +102,7 @@ Ext.define('Ext.ux.panel.Rack',
                 {
                     id: this.getId() + '-row' + u,
                     tag: 'tr',
-                    cls: (i == this.elevation_max ? 'last' : ''),
+                    cls: (i == this.elevation_max ? 'last' : (this.racktablespec.children.length == 0 ? 'first' : '')),
                     children: [
                     {
                         tag: 'td',
