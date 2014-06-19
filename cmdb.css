@@ -1,4 +1,4 @@
-/*
+ /*
 Copyright 2011-2013 Proofpoint, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,16 @@ body{
     border: 1px dotted gray;
     padding-left: 3px;
     padding-bottom: 2px;
+}
+.cmdb_puppet_classes_field {
+    border: 1px dotted gray;
+    padding-left: 3px;
+    padding-bottom: 2px;
+}
+.cmdb_puppet_classes_field a {
+    color: black;
+    padding-right:5px;
+    font: 1em 'Courier New', Courier, Fixed, monospace;
 }
 .pageloading
 {
