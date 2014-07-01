@@ -352,17 +352,15 @@ Ext.onReady(function(){
 	
 	var environtment_services_panel=new PP.EnvironmentServices({
 		id: 'service_grid',
-		region: 'center',
 		stateful:true,
+		flex: 3,
 		defaultEnvironment: PP.config.default_environment
 	});
 
 	var service_view_panel = new PP.ServiceViewPanel({
-		region: 'east',
 		editing:PP.allowEditing,
-		split:true,
 		id: 'service_view',
-		width:350
+		flex: 2
 	})
 
 	// tie the grid to the service_view_panel
@@ -457,7 +455,10 @@ Ext.onReady(function(){
 					},
 					{
 						title: 'Services / Environments',
-						layout:'border',
+						layout:{
+							type: 'hbox',
+							align: 'stretch'
+						},
 						items:[ environtment_services_panel, service_view_panel ],
 						// listeners:{
 						// 	'activate': function(){
