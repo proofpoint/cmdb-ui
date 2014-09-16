@@ -100,7 +100,7 @@ PP.showInstanceConsole=function(sys)
 		region: 'center',
 		autoScroll: true,
 		loader:{
-			url: PP.config.pcm_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.serial_number + '/console_log',
+			url: PP.config.pcm_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.uuid + '/console_log',
 			autoLoad: false,
 			loadMask: true,
 			renderer: function(loader, response, active){
@@ -141,7 +141,7 @@ PP.rebootInstance=function(sys)
 	Ext.Ajax.request({
 		method:'PUT',
 		timeout: 520000,
-		url: PP.config.pcm_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.serial_number,
+		url: PP.config.pcm_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.uuid,
 		jsonData: '{"status":"reboot"}',
 		success:function(resp){
 			Ext.Msg.hide();
@@ -166,7 +166,7 @@ PP.rebootInstance=function(sys)
 PP.terminateInstance=function(sys)
 {
 	
-	var instanceUUID=sys.data.serial_number;
+	var instanceUUID=sys.data.uuid;
 	var data_center_code=sys.data.data_center_code;
 //TODO need to make this work better.  maybe use data_center_code
 	if(!sys.data.data_center_code)
