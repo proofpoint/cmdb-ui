@@ -132,7 +132,7 @@ PP.showInstanceConsole=function(sys)
 PP.rebootInstance=function(sys)
 {
 	Ext.MessageBox.show({
-		msg:'Rebooting Prism Instance',
+		msg:'Rebooting NOMS Instance',
 		progressText: 'sending reboot request...',
 		width: 200,
 		wait: true,
@@ -186,7 +186,7 @@ PP.terminateInstance=function(sys)
 	}
 	
 	Ext.MessageBox.show({
-		msg:'Terminating Prism Instance',
+		msg:'Terminating NOMS Instance',
 		progressText: 'sending terminate request...',
 		width: 200,
 		wait: true,
@@ -380,9 +380,9 @@ PP.newInstanceWindow=function (){
 	PP.instanceLocationStore.load();
 	var new_instance_env_combo=PP.getEditorConfig('environment_name',{entity:'system',labels:true});
 	new_instance_env_combo.value=PP.config.default_environment || null;
-	new_instance_env_combo.store.load();
+	// new_instance_env_combo.store.load();
 	var newinstance_window=new Ext.Window({
-		title: 'New PRISM Instance',
+		title: 'New NOMS Instance',
 		height: 275,
 		width: 400,
 		layout: 'border',
