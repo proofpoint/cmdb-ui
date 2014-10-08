@@ -24,25 +24,56 @@ Ext.define('instance',{
 		sortParam: undefined,
 		filterParam: undefined,
 		url: PP.config.pcm_api_path +'v2/',
-		urlBase: PP.config.pcm_api_path +'v2/'
+		urlBase: PP.config.pcm_api_path +'v2/',
+        listeners:
+        {
+            exception: function(proxy, response, operation)
+            {
+                if (operation)
+                {
+                    if (operation['error'] && operation['error']['status'])
+                        Ext.Msg.alert('NCC Error', operation.error.status + ": " + operation.error.statusText);
+                }
+                else
+                {
+                    // May be a proxy error...
+                }
+            }
+        }		
 	}
 });
- 
-Ext.define('instance_size',{
-	extend: 'Ext.data.Model',
-	fields: ['id','provider','name','description','price','ram','cores','disk'],
-	proxy: {
-		type: 'rest',
-		timeout: 150000,
-		startParam: undefined,
-		pageParam: undefined,
-		limitParam: undefined,
-		sortParam: undefined,
-		filterParam: undefined,
-		url: PP.config.pcm_api_path + 'v2/sizes',
-		urlBase: PP.config.pcm_api_path +'v2/'
-	}
-})
+Ext.define('instance_size',
+{
+    extend: 'Ext.data.Model',
+    fields: ['id', 'provider', 'name', 'description', 'price', 'ram', 'cores', 'disk'],
+    proxy:
+    {
+        type: 'rest',
+        timeout: 150000,
+        startParam: undefined,
+        pageParam: undefined,
+        limitParam: undefined,
+        sortParam: undefined,
+        filterParam: undefined,
+        url: PP.config.pcm_api_path + 'v2/sizes',
+        urlBase: PP.config.pcm_api_path + 'v2/',
+        listeners:
+        {
+            exception: function(proxy, response, operation)
+            {
+                if (operation)
+                {
+                    if (operation['error'] && operation['error']['status'])
+                        Ext.Msg.alert('NCC Error', operation.error.status + ": " + operation.error.statusText);
+                }
+                else
+                {
+                    // May be a proxy error...
+                }
+            }
+        }
+    }
+});
 
 PP.instance_size_store = new Ext.data.Store({
 	model: 'instance_size',
@@ -50,42 +81,81 @@ PP.instance_size_store = new Ext.data.Store({
 });
 
 Ext.define('instance_image',{
-	extend: 'Ext.data.Model',
-	fields: ['id','operatingsystemrelease','name','description','cost','operatingsystem','osfamily','provider_id'],
-	proxy: {
-		type: 'rest',
-		timeout: 150000,
-		startParam: undefined,
-		pageParam: undefined,
-		limitParam: undefined,
-		sortParam: undefined,
-		filterParam: undefined,
-		url: PP.config.pcm_api_path + 'v2/sizes',
-		urlBase: PP.config.pcm_api_path +'v2/'
-	},
-})
+    extend: 'Ext.data.Model',
+    fields: ['id', 'operatingsystemrelease', 'name', 'description', 'cost', 'operatingsystem', 'osfamily', 'provider_id'],
+    proxy:
+    {
+        type: 'rest',
+        timeout: 150000,
+        startParam: undefined,
+        pageParam: undefined,
+        limitParam: undefined,
+        sortParam: undefined,
+        filterParam: undefined,
+        url: PP.config.pcm_api_path + 'v2/sizes',
+        urlBase: PP.config.pcm_api_path + 'v2/',
+        listeners:
+        {
+            exception: function(proxy, response, operation)
+            {
+                if (operation)
+                {
+                    if (operation['error'] && operation['error']['status'])
+                        Ext.Msg.alert('NCC Error', operation.error.status + ": " + operation.error.statusText);
+                }
+                else
+                {
+                    // May be a proxy error...
+                }
+            }
+        }
+    },
+});
 
 PP.instance_image_store = new Ext.data.Store({
 	model: 'instance_image',
 	autoLoad:true
 });
 
-Ext.define('instanceLocationModel',{
-	extend: 'Ext.data.Model',
-	fields: [ {name: 'name', convert: function(value,record){
-		return record.raw;
-	}} ],
-	proxy: {
-		type: 'rest',
-		reader: 'array',
-		timeout: 150000,
-		startParam: undefined,
-		pageParam: undefined,
-		limitParam: undefined,
-		sortParam: undefined,
-		filterParam: undefined,
-		url: PP.config.pcm_api_path + 'v2/clouds'
-	}
+Ext.define('instanceLocationModel',
+    {
+        extend: 'Ext.data.Model',
+        fields: [
+        {
+            name: 'name',
+            convert: function(value, record)
+            {
+                return record.raw;
+            }
+        }],
+        proxy:
+        {
+            type: 'rest',
+            reader: 'array',
+            timeout: 150000,
+            startParam: undefined,
+            pageParam: undefined,
+            limitParam: undefined,
+            sortParam: undefined,
+            filterParam: undefined,
+            url: PP.config.pcm_api_path + 'v2/clouds',
+            listeners:
+            {
+                exception: function(proxy, response, operation)
+                {
+                    if (operation)
+                    {
+                        if (operation['error'] && operation['error']['status'])
+                            Ext.Msg.alert('NCC Error', operation.error.status + ": " + operation.error.statusText);
+                    }
+                    else
+                    {
+                        // May be a proxy error...
+                    }
+                }
+            }
+        }
+    }
 });
 PP.instanceLocationStore=Ext.create('Ext.data.Store',{
 	storeId: 'instanceLocations',
