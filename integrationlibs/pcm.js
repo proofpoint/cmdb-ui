@@ -155,8 +155,7 @@ Ext.define('instanceLocationModel',
                 }
             }
         }
-    }
-});
+    });
 PP.instanceLocationStore=Ext.create('Ext.data.Store',{
 	storeId: 'instanceLocations',
 	model: 'instanceLocationModel',
