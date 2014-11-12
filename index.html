@@ -152,10 +152,10 @@ if (status >= 200 && status < 300) {
 		console.log('loading custom extension for Splunk')
 		Ext.Loader.loadScript("integrationlibs/Splunk.js");
 	}
-	if(PP.config.pcm_api)
+	if(PP.config.ncc_api)
 	{
-		console.log('loading custom extension for PCM (cloud mgmt)')
-		Ext.Loader.loadScript("integrationlibs/pcm.js");		
+		console.log('loading custom extension for NCC (cloud mgmt)')
+		Ext.Loader.loadScript("integrationlibs/ncc.js");		
 	}
 	if(PP.config.rundeck_api)
 	{
@@ -332,8 +332,7 @@ Ext.onReady(function(){
 					{leaf:true,qtype:'js',text:'Data Center Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"data_center",startQuerytype:"data_center_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Rack Editor(admin)',js:'PP.showRackEditor()'},
-					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
-					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
+					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'}
 				]}
 			]
 			
