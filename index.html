@@ -256,7 +256,7 @@ PP.saveRecord=function(r,callback){
 }
 
 var userinfohtml='Username: ' + PP.currentUser + '<br>Access: ';
-if(PP.allowEditing)
+if(PP.allowEditing && PP.user.groups != null)
 {
 	if(PP.user && PP.user.groups.match(/Admin/))
 	{
@@ -269,6 +269,7 @@ if(PP.allowEditing)
 }
 else
 {
+	PP.allowEditing = false;
 	userinfohtml+='read-only';
 }
 function highlightAdmin(){

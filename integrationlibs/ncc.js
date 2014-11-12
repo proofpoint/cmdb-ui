@@ -212,6 +212,10 @@ PP.showInstanceConsole = function(sys)
 }
 PP.rebootInstance = function(sys)
 {
+    if (!PP.allowEditing)
+    {
+        return;
+    }
     Ext.MessageBox.show(
     {
         msg: 'Rebooting NOMS Instance',
@@ -253,6 +257,10 @@ PP.rebootInstance = function(sys)
 }
 PP.terminateInstance = function(sys)
 {
+    if (!PP.allowEditing)
+    {
+        return;
+    }
 
     var instanceUUID = sys.data.uuid.toLowerCase();
     var data_center_code = sys.data.data_center_code;
@@ -489,6 +497,10 @@ PP.makeInstanceRequest = function(config)
 
 PP.newInstanceWindow = function()
 {
+    if (!PP.allowEditing)
+    {
+        return;
+    }
     PP.instance_size_store.load();
     PP.instanceLocationStore.load();
     var new_instance_env_combo = PP.getEditorConfig('environment_name',
