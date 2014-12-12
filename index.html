@@ -39,7 +39,7 @@ limitations under the License.
 <script type="text/javascript" src="ux/exporter/downloadify.min.js"></script>
 <script type="text/javascript" src="ux/exporter/swfobject.js"></script>
 <script>
-
+delete Ext.tip.Tip.prototype.minWidth;
 function loadjscssfile(filename, filetype){
  if (filetype=="js"){ //if filename is a external JavaScript file
   var fileref=document.createElement('script')
