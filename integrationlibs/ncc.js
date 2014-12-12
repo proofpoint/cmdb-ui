@@ -19,7 +19,7 @@ Ext.define('instance',
     proxy:
     {
         type: 'rest',
-        timeout: 150000,
+        timeout: 500000,
         startParam: undefined,
         pageParam: undefined,
         limitParam: undefined,
@@ -51,7 +51,7 @@ Ext.define('instance_size',
     proxy:
     {
         type: 'rest',
-        timeout: 150000,
+        timeout: 500000,
         startParam: undefined,
         pageParam: undefined,
         limitParam: undefined,
@@ -90,7 +90,7 @@ Ext.define('instance_image',
     proxy:
     {
         type: 'rest',
-        timeout: 150000,
+        timeout: 500000,
         startParam: undefined,
         pageParam: undefined,
         limitParam: undefined,
@@ -137,7 +137,7 @@ Ext.define('instanceLocationModel',
     {
         type: 'rest',
         reader: 'array',
-        timeout: 150000,
+        timeout: 500000,
         startParam: undefined,
         pageParam: undefined,
         limitParam: undefined,
