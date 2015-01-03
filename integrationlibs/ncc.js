@@ -648,6 +648,26 @@ PP.newInstanceWindow = function()
                                 this.expand();
                             }
                         }
+                    },
+                    listConfig:
+                    {
+                        getInnerTpl: function()
+                        {
+                            var tm = ['<tpl for=".">', 
+                            '<div class="x-combo-list-item">',
+                            '<div class="ux-lovcombo-item-text">{description}</div>',
+                            '<div class="ux-lovcombo-item-smalltext">',
+                            '<tpl if="operatingsystem">',
+                                '<i>OS</i>: {operatingsystem}',
+                            '</tpl>',
+                            '<tpl if="operatingsystemrelease">',
+                                ' <i>Release</i>: {operatingsystemrelease}',
+                            '</tpl>',
+                            '</div>',
+                            '</div>',
+                            '</tpl>'];
+                            return tm.join('');
+                        }
                     }
                 },
                 {
