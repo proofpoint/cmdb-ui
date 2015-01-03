@@ -610,10 +610,15 @@ PP.newInstanceWindow = function()
                             var tm = ['<tpl for=".">', 
                             '<div class="x-combo-list-item">',
                             '<div class="ux-lovcombo-item-text">{id}</div>',
-                            '<div class="ux-lovcombo-item-smalltext">cores: {cores} ram: {ram} MB disk: {disk} GB  ',
-                            '<tpl if="price &gt; 0">',
-                                'cost: (${price}/mo)</div>',
+                            '<div class="ux-lovcombo-item-smalltext">',
+                            '<tpl if="cores &gt; 0">',
+                                '{cores} core(s), ',
                             '</tpl>',
+                            '{ram} MB ram, {disk} GB disk',
+                            '<tpl if="price &gt; 0">',
+                                ', cost: (${price}/mo)',
+                            '</tpl>',
+                            '</div>',
                             '</div>',
                             '</tpl>'];
                             return tm.join('');
