@@ -1,4 +1,5 @@
 // Copyright 2011-2013 Proofpoint, Inc.
+// Copyright 2014-2015 Evernote, Inc.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -606,8 +607,16 @@ PP.newInstanceWindow = function()
                     {
                         getInnerTpl: function()
                         {
-                            var tm = '<tpl for=".">' + '<div class="x-combo-list-item">' + '<div class="ux-lovcombo-item-text">{id}</div>' + '<div class="ux-lovcombo-item-smalltext">cores: {cores} ram: {ram} MB disk: {disk} GB  (${price}/mo)</div>' + '</div>' + '</tpl>';
-                            return tm;
+                            var tm = ['<tpl for=".">', 
+                            '<div class="x-combo-list-item">',
+                            '<div class="ux-lovcombo-item-text">{id}</div>',
+                            '<div class="ux-lovcombo-item-smalltext">cores: {cores} ram: {ram} MB disk: {disk} GB  ',
+                            '<tpl if="price &gt; 0">',
+                                'cost: (${price}/mo)</div>',
+                            '</tpl>',
+                            '</div>',
+                            '</tpl>'];
+                            return tm.join('');
                         }
                     }
                 },
