@@ -169,6 +169,23 @@ PP.instanceLocationStore = Ext.create('Ext.data.Store',
     autoLoad: true
 });
 
+PP.openInteractiveConsole= function(sys)
+{
+    Ext.Ajax.request({
+        method: 'GET',
+        url: PP.config.ncc_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.uuid.toLowerCase() + '/console_url', 
+        // url: '/console_url', 
+        success: function(resp){
+            var rtn = Ext.decode(resp.responseText);
+            window.open(rtn.url + '&title=' + sys.get('fqdn') + ' console', sys.get('fqdn') + ' console', "height=700,width=00");
+        },
+        failure: function(resp)
+        {
+            Ext.Msg.alert('Error', 'Received an error when trying to get a console url from ncc_api: <br> ' + resp.responseText);
+        }
+
+    });
+}
 PP.showInstanceConsole = function(sys)
 {
     var p = new Ext.Panel(
