@@ -3,7 +3,8 @@
  * @author Ed Spencer (http://edspencer.net), with modifications from iwiznia.
  * Class providing a common way of downloading data in .xls or .csv format
  */
-Ext.define("Ext.ux.exporter.Exporter", {
+Ext.define("Ext.ux.exporter.Exporter",
+{
     uses: [
         "Ext.ux.exporter.Base64",
         "Ext.ux.exporter.Button",
@@ -12,16 +13,25 @@ Ext.define("Ext.ux.exporter.Exporter", {
         "Ext.ux.exporter.excelFormatter.ExcelFormatter"
     ],
 
-    statics: {
-        exportAny: function(component, formatter, config) {
+    statics:
+    {
+        exportAny: function(component, formatter, config)
+        {
             var func = "export";
-            if(!component.is) {
+            if (!component.is)
+            {
                 func = func + "Store";
-            } else if(component.is("gridpanel")) {
+            }
+            else if (component.is("gridpanel"))
+            {
                 func = func + "Grid";
-            } else if (component.is("treepanel")) {
+            }
+            else if (component.is("treepanel"))
+            {
                 func = func + "Tree";
-            } else {
+            }
+            else
+            {
                 func = func + "Store";
                 component = component.getStore();
             }
@@ -34,47 +44,65 @@ Ext.define("Ext.ux.exporter.Exporter", {
          * @param {Ext.grid.GridPanel} grid The grid to export from
          * @param {Object} config Optional config settings for the formatter
          */
-        exportGrid: function(grid, formatter, config) {
-          config = config || {};
-          formatter = this.getFormatterByName(formatter);
+        exportGrid: function(grid, formatter, config)
+        {
+            config = config ||
+            {};
+            formatter = this.getFormatterByName(formatter);
 
-          var columns = Ext.Array.filter(grid.columns, function(col) {
-              return !col.hidden; // && (!col.xtype || col.xtype != "actioncolumn");
-          });
+            // original code here doesn't get columns from column header, so is incorrect after grid reconfigure
+            // var columns = Ext.Array.filter(grid.columns, function(col) {
+            //     return !col.hidden; // && (!col.xtype || col.xtype != "actioncolumn");
+            // });
 
-          Ext.applyIf(config, {
-            title  : grid.title,
-            columns: columns
-          });
+            var columns = Ext.Array.filter(grid.headerCt.getGridColumns(), function(col)
+            {
+                return !col.hidden; // && (!col.xtype || col.xtype != "actioncolumn");
+            });
 
-          return formatter.format(grid.store, config);
+            Ext.applyIf(config,
+            {
+                title: grid.title,
+                columns: columns
+            });
+
+            config.columns = columns;
+
+            return formatter.format(grid.store, config);
         },
 
-        exportStore: function(store, formatter, config) {
-           config = config || {};
-           formatter = this.getFormatterByName(formatter);
+        exportStore: function(store, formatter, config)
+        {
+            config = config ||
+            {};
+            formatter = this.getFormatterByName(formatter);
 
-           Ext.applyIf(config, {
-             columns: store.fields ? store.fields.items : store.model.prototype.fields.items
-           });
+            Ext.applyIf(config,
+            {
+                columns: store.fields ? store.fields.items : store.model.prototype.fields.items
+            });
 
-           return formatter.format(store, config);
+            return formatter.format(store, config);
         },
 
-        exportTree: function(tree, formatter, config) {
-          config    = config || {};
-          formatter = this.getFormatterByName(formatter);
+        exportTree: function(tree, formatter, config)
+        {
+            config = config ||
+            {};
+            formatter = this.getFormatterByName(formatter);
 
-          var store = tree.store || config.store;
+            var store = tree.store || config.store;
 
-          Ext.applyIf(config, {
-            title: tree.title
-          });
+            Ext.applyIf(config,
+            {
+                title: tree.title
+            });
 
-          return formatter.format(store, config);
+            return formatter.format(store, config);
         },
 
-        getFormatterByName: function(formatter) {
+        getFormatterByName: function(formatter)
+        {
             formatter = formatter ? formatter : "csv";
             formatter = !Ext.isString(formatter) ? formatter : Ext.create("Ext.ux.exporter." + formatter + "Formatter." + Ext.String.capitalize(formatter) + "Formatter");
             return formatter;

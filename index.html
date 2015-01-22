@@ -16,6 +16,8 @@ limitations under the License.
 
 <html>
 <head>
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<title>Ops Inv (ext4)</title>
 	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-debug.css" />
 	<link rel="stylesheet" type="text/css" href="cmdb.css" />
@@ -37,7 +39,7 @@ limitations under the License.
 <script type="text/javascript" src="ux/exporter/downloadify.min.js"></script>
 <script type="text/javascript" src="ux/exporter/swfobject.js"></script>
 <script>
-
+delete Ext.tip.Tip.prototype.minWidth;
 function loadjscssfile(filename, filetype){
  if (filetype=="js"){ //if filename is a external JavaScript file
   var fileref=document.createElement('script')
@@ -150,10 +152,10 @@ if (status >= 200 && status < 300) {
 		console.log('loading custom extension for Splunk')
 		Ext.Loader.loadScript("integrationlibs/Splunk.js");
 	}
-	if(PP.config.pcm_api)
+	if(PP.config.ncc_api)
 	{
-		console.log('loading custom extension for PCM (cloud mgmt)')
-		Ext.Loader.loadScript("integrationlibs/pcm.js");		
+		console.log('loading custom extension for NCC (cloud mgmt)')
+		Ext.Loader.loadScript("integrationlibs/ncc.js");		
 	}
 	if(PP.config.rundeck_api)
 	{
@@ -168,7 +170,7 @@ else {
 }
 
 </script>
-<script type="text/javascript" src="lib/pp_lexicon.js"></script>
+<script type="text/javascript" src="lib/lexicon.js"></script>
 <script type="text/javascript" src="Base64.js"></script>
 <script type="text/javascript" src="lib/cmdb.js"></script>
 <script type="text/javascript" src="lib/AuditPanel.js"></script>
@@ -182,6 +184,7 @@ else {
 <script type="text/javascript" src="lib/ExtFixes.js"></script>
 <script type="text/javascript" src="lib/KeyUploader.js"></script>
 <script type="text/javascript" src="integrationlibs/quicklinks.js"></script>
+<script type="text/javascript" src="integrationlibs/custom.js"></script>
 
 <script>
 if(Ext.isIE)
@@ -253,7 +256,7 @@ PP.saveRecord=function(r,callback){
 }
 
 var userinfohtml='Username: ' + PP.currentUser + '<br>Access: ';
-if(PP.allowEditing)
+if(PP.allowEditing && PP.user.groups != null)
 {
 	if(PP.user && PP.user.groups.match(/Admin/))
 	{
@@ -266,6 +269,7 @@ if(PP.allowEditing)
 }
 else
 {
+	PP.allowEditing = false;
 	userinfohtml+='read-only';
 }
 function highlightAdmin(){
@@ -325,12 +329,11 @@ Ext.onReady(function(){
 				{text: 'Reports',id: 'reports',expanded:true},
 				{text: 'Links', id: 'other_links',expanded:true},
 				{text: 'Admin Tools',expanded:false, children:[
-			{leaf:true,qtype:'js',text:'Roles',js:'var w=new Ext.Window({title:"Roles",height:500,width:700,layout:"fit",items:[new PP.EntityEditorGrid({deleteEnabled:true,autoScroll:true,region:"center",entity:"role",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'},
+			{leaf:true,qtype:'js',text:'Roles',js:'PP.rolesEditorWindow();'},
 					{leaf:true,qtype:'js',text:'Data Center Editor(admin)',js:'var w=new Ext.Window({title:"Datacenters",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"data_center",startQuerytype:"data_center_code",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'DataCenter Subnets Editor(admin)',js:'var w=new Ext.Window({title:"Datacenter Subnets",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"datacenter_subnet",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
 					{leaf:true,qtype:'js',text:'Rack Editor(admin)',js:'PP.showRackEditor()'},
-					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'},
-					{leaf:true,qtype:'js',text:'PCM Location Editor',js:'var w=new Ext.Window({title:"PCM Location",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"instance_location",lexicon:PP.lexicon,startQuery:"*"})]});w.show();'}
+					{leaf:true,qtype:'js',text:'Hardware Class Editor(admin)',js:'var w=new Ext.Window({listeners:{beforedestroy:function(){Ext.StoreManager.get("environment_store").load(function(){this.fireEvent("load");})}},title:"Hardware Class",height:500,width:700,layout:"border",items:[new PP.EntityEditorGrid({deleteEnabled:true,region:"center",entity:"hardware_model",startQuery:"*",lexicon:PP.lexicon})]});w.show();'}
 				]}
 			]
 			
@@ -351,17 +354,15 @@ Ext.onReady(function(){
 	
 	var environtment_services_panel=new PP.EnvironmentServices({
 		id: 'service_grid',
-		region: 'center',
 		stateful:true,
+		flex: 3,
 		defaultEnvironment: PP.config.default_environment
 	});
 
 	var service_view_panel = new PP.ServiceViewPanel({
-		region: 'east',
 		editing:PP.allowEditing,
-		split:true,
 		id: 'service_view',
-		width:350
+		flex: 2
 	})
 
 	// tie the grid to the service_view_panel
@@ -456,7 +457,10 @@ Ext.onReady(function(){
 					},
 					{
 						title: 'Services / Environments',
-						layout:'border',
+						layout:{
+							type: 'hbox',
+							align: 'stretch'
+						},
 						items:[ environtment_services_panel, service_view_panel ],
 						// listeners:{
 						// 	'activate': function(){
