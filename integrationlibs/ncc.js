@@ -173,7 +173,7 @@ PP.openInteractiveConsole= function(sys)
 {
     Ext.Ajax.request({
         method: 'GET',
-        url: PP.config.ncc_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.uuid.toLowerCase() + '/console_url', 
+        url: PP.config.ncc_api_path + 'v2/clouds/' + sys.data.cloud + '/instances/' + sys.data.uuid.toLowerCase() + '/console', 
         // url: '/console_url', 
         success: function(resp){
             var rtn = Ext.decode(resp.responseText);
